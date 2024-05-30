@@ -4,16 +4,22 @@ import json
 
 # Function to get Pokémon data from the PokéAPI
 def get_pokemon_data(pokemon_name):
-    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}")
-    if response.status_code == 200:
+    try:
+        response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}")
+        response.raise_for_status()
         return response.json()
-    else:
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data for {pokemon_name}: {e}")
         return None
 
 # Function to save Pokémon data to a file
-def save_to_file(data, filename="pokemon_data.txt"):
-    with open(filename, 'w') as file:
-        json.dump(data, file, indent=4)
+def save_to_file(data, filename="pokemon_data.json"):
+    try:
+        with open(filename, 'w') as file:
+            json.dump(data, file, indent=4)
+            print(f"Data successfully saved to {filename}")
+    except IOError as e:
+        print(f"Error saving data to file: {e}")
 
 # Main function to interact with the user and process Pokémon data
 def main():
@@ -26,10 +32,9 @@ def main():
             break
         elif user_input.lower() == 'random':
             random_id = random.randint(1, 151)
-            response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{random_id}")
-            if response.status_code == 200:
-                data = response.json()
-                pokemon_list.append(data['name'])
+            random_pokemon = get_pokemon_data(str(random_id))
+            if random_pokemon:
+                pokemon_list.append(random_pokemon['name'])
             else:
                 print("Failed to retrieve a random Pokémon. Please try again.")
         else:
