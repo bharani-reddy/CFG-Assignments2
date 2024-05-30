@@ -38,16 +38,10 @@ def main():
             random_pokemon = get_pokemon_data(str(random_id))
             if random_pokemon:
                 pokemon_list.append(random_pokemon['name'])
-                print(f"Random Pokémon added: {random_pokemon['name']}")
             else:
                 print("Failed to retrieve a random Pokémon. Please try again.")
         else:
-            data = get_pokemon_data(user_input)
-            if data:
-                pokemon_list.append(data['name'])
-                print(f"Pokémon added: {data['name']}")
-            else:
-                print(f"No data found for Pokémon: {user_input}. Please enter a valid Pokémon name.")
+            pokemon_list.append(user_input)
 
     # Ensure Pikachu is included
     if "pikachu" not in pokemon_list:
