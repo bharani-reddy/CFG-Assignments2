@@ -47,7 +47,7 @@ def main():
                 pokemon_list.append(data['name'])
                 print(f"Pokémon added: {data['name']}")
             else:
-                print(f"No data found for Pokémon: {user_input}")
+                print(f"No data found for Pokémon: {user_input}. Please enter a valid Pokémon name.")
 
     # Ensure Pikachu is included
     if "pikachu" not in pokemon_list:
