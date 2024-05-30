@@ -1,20 +1,18 @@
-import urllib.request
-import urllib.error
+import http.client
 import json
 import random
 
 # Function to get Pokémon data from the PokéAPI
 def get_pokemon_data(pokemon_name):
-    url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}"
-    try:
-        with urllib.request.urlopen(url) as response:
-            data = response.read()
-            return json.loads(data)
-    except urllib.error.HTTPError as e:
-        print(f"Error fetching data for {pokemon_name}: {e.reason}")
-        return None
-    except urllib.error.URLError as e:
-        print(f"URL error: {e.reason}")
+    conn = http.client.HTTPSConnection("pokeapi.co")
+    conn.request("GET", f"/api/v2/pokemon/{pokemon_name.lower()}")
+    response = conn.getresponse()
+
+    if response.status == 200:
+        data = response.read()
+        return json.loads(data)
+    else:
+        print(f"Error fetching data for {pokemon_name}: {response.reason}")
         return None
 
 # Function to save Pokémon data to a file
@@ -40,10 +38,16 @@ def main():
             random_pokemon = get_pokemon_data(str(random_id))
             if random_pokemon:
                 pokemon_list.append(random_pokemon['name'])
+                print(f"Random Pokémon added: {random_pokemon['name']}")
             else:
                 print("Failed to retrieve a random Pokémon. Please try again.")
         else:
-            pokemon_list.append(user_input)
+            data = get_pokemon_data(user_input)
+            if data:
+                pokemon_list.append(data['name'])
+                print(f"Pokémon added: {data['name']}")
+            else:
+                print(f"No data found for Pokémon: {user_input}")
 
     # Ensure Pikachu is included
     if "pikachu" not in pokemon_list:
