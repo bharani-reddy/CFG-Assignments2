@@ -1,15 +1,20 @@
-import requests
-import random
+import urllib.request
+import urllib.error
 import json
+import random
 
 # Function to get Pokémon data from the PokéAPI
 def get_pokemon_data(pokemon_name):
+    url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}"
     try:
-        response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}")
-        response.raise_for_status()
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching data for {pokemon_name}: {e}")
+        with urllib.request.urlopen(url) as response:
+            data = response.read()
+            return json.loads(data)
+    except urllib.error.HTTPError as e:
+        print(f"Error fetching data for {pokemon_name}: {e.reason}")
+        return None
+    except urllib.error.URLError as e:
+        print(f"URL error: {e.reason}")
         return None
 
 # Function to save Pokémon data to a file
