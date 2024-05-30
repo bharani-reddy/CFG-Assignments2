@@ -2,7 +2,7 @@
 
 This repository contains the code for my assignments for the CFG degree program.
 
-## Assignment 3 - API Interaction
+## Assignment 2 - API Interaction
 
 This project interacts with the PokéAPI to retrieve information about Pokémon and saves the results to a file.
 ![image](https://github.com/bharani-reddy/CFG-Assignments2/assets/170067248/f1b574b7-5e0c-438d-8621-a45966b3d48e)
